@@ -1,138 +1,405 @@
-# Golf Simulator Rendering Tool
+# Golf Simulator Sales & Configuration Tool
 
-An interactive 3D golf simulator configuration and rendering tool built with React and Three.js.
+**A professional 3D golf simulator configuration tool for your sales team.**
 
-## 🎯 Where Is Your Data Saved?
+Create, customize, and share interactive 3D golf simulator proposals with clients. Auto-save, URL sharing, and real-time pricing make it easy to close deals faster.
 
-**IMPORTANT: Your configuration data is currently stored IN YOUR BROWSER's memory only (React state).**
+---
 
-This means:
-- ✅ **While the app is running**: All your configuration settings (room dimensions, equipment choices, pricing, etc.) are stored in the component's state
-- ❌ **When you refresh the page**: All settings are lost and reset to defaults
-- ❌ **No automatic saving**: The app does NOT currently save your configurations to a file or database
+## 🎯 Perfect For
 
-### What Gets Saved?
+- **Sales Teams**: Configure and quote simulators in real-time
+- **Client Presentations**: Share interactive 3D links
+- **Installation Teams**: Export detailed technical specifications
+- **Showrooms**: Let clients explore configurations on-site
 
-Currently, the ONLY way to save your configuration is:
-1. **Snapshot Button**: Click the "Snapshot" button in the control panel to download a `.txt` file with all measurements and equipment specifications
-2. **Manual Screenshot**: Take screenshots of your 3D render for visual reference
+---
 
-### Where Data SHOULD Be Saved (Future Improvements)
+## ⚡ Quick Start
 
-See the "RECOMMENDED IMPROVEMENTS.md" file for detailed suggestions on data storage, including:
-- Browser localStorage for automatic saving
-- Export/Import JSON configurations
-- Save configuration presets
-- URL sharing with encoded configurations
+**Never used this before?** → See [SETUP_GUIDE.md](./SETUP_GUIDE.md) for step-by-step instructions
 
-## 🚀 Getting Started
-
-### Installation
+**Already set up?** → Run these commands:
 
 ```bash
-# Install dependencies
-npm install
-
-# Start the development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
+npm install    # First time only
+npm run dev    # Start the app
 ```
 
-### First-Time Setup
+Then open **http://localhost:3000** in your browser.
 
-After running `npm run dev`, the app will open in your browser at `http://localhost:3000`
+---
 
-## 📋 Features
+## 💡 Key Sales Features
 
-- **3D Interactive Visualization**: Real-time 3D rendering of your golf simulator room
-- **Equipment Configuration**: Choose projectors, launch monitors, screens, and accessories
-- **Room Customization**: Adjust dimensions, colors, flooring, and lighting
-- **Electrical Planning**: Visualize outlet placements and conduit runs
-- **Live Pricing**: Real-time cost estimation based on selected equipment
-- **Snapshot Export**: Download detailed measurement and configuration reports
+### 📋 **Share Link** - Send Interactive Proposals
+- Click "Share Link" to copy a URL
+- Send to clients via email/text
+- Client sees YOUR exact configuration in 3D
+- They can rotate, zoom, and explore
+- **Perfect for remote sales!**
 
-## 🎮 Controls
+### 💾 **Export/Import** - Save Client Configurations
+- Export: Save as `.json` file
+- Import: Load previous client's setup
+- Share configs across your sales team
+- Archive proposals for later
 
-- **Mouse/Trackpad**:
-  - Click and drag to rotate the view
-  - Scroll to zoom in/out
-- **Touch (Mobile)**:
-  - Swipe to rotate
-  - Pinch to zoom
-- **Control Panels**: Drag panels by their title bars to reposition
+### 💰 **Live Pricing** - Instant Quotes
+- Real-time price calculator
+- Updates as you change equipment
+- Transparent breakdown by item
+- Export pricing with snapshot
 
-## 📁 Project Structure
+### 📸 **Technical Snapshot** - For Installers
+- Download detailed `.txt` report
+- All measurements and specifications
+- Electrical layout and conduit paths
+- Equipment locations with coordinates
+
+### 🔄 **Auto-Save** - Never Lose Work
+- Automatically saves every few seconds
+- Saved to your browser
+- Refresh page - your work is still there!
+- Works offline
+
+---
+
+## 🏢 Sales Workflow
+
+### 1. **Initial Client Call**
+- Gather room dimensions
+- Discuss budget and preferences
+- Note equipment preferences
+
+### 2. **Configure in 3D**
+- Open the tool
+- Enter room dimensions
+- Select equipment (projector, launch monitor, etc.)
+- Add furniture and accessories
+- Review live pricing
+
+### 3. **Share with Client**
+- Click "📋 Share Link"
+- Email or text the URL to client:
+
+```
+Hi [Client],
+
+I've created a 3D design of your golf simulator.
+View it here: [PASTE LINK]
+
+Total: $XX,XXX
+
+Let me know your thoughts!
+```
+
+### 4. **Client Explores**
+- Client opens link on phone/computer
+- Sees exact configuration in 3D
+- Can rotate and zoom around the room
+- Reviews pricing breakdown
+
+### 5. **Revisions** (if needed)
+- Client requests changes
+- You adjust configuration
+- Send new share link
+- Repeat until approved
+
+### 6. **Close the Deal**
+- Client approves design
+- Export final configuration (JSON)
+- Generate snapshot for installation team
+- Archive for records
+
+---
+
+## 🛠️ Features Overview
+
+### Room Customization
+- Dimensions (width, depth, height)
+- Wall and ceiling colors (white, black, charcoal, gray)
+- Flooring (green turf, black turf, flush or raised)
+- LED lighting strips
+- Side wall curtains
+- Rough/fringe borders
+
+### Equipment Selection
+
+**Projectors** (4K & 1080P)
+- BenQ LK936ST, TK710STi, AK700ST
+- Optoma UHZ35ST, ZK608ST, ZW350ST, etc.
+- Auto-calculated throw distances
+- Zoom lens support
+
+**Launch Monitors** (Ceiling & Floor)
+- Uneekor (EYE XO2, XO, XR, MINI, MINI LITE)
+- Foresight (Falcon, GC3)
+- ProTee VX, TruGolf Apogee, Trackman IO
+- Bushnell, Garmin R10/R50, TruGolf LaunchBox
+
+**Screens**
+- Built-in wall screen
+- Cage enclosure
+- Acoustic panels (optional)
+- Custom dimensions
+
+**Accessories**
+- TV monitors (24"-65")
+- Computer workstation
+- Ball dispenser
+- Putting cups (1-2)
+- Furniture (barstools, couches, tables, chairs)
+- Golfer avatar (visualization)
+
+### Technical Features
+- 3D interactive visualization (Three.js)
+- Real-time rendering
+- Camera controls (rotate, zoom, pan)
+- Electrical planning (outlets, conduit paths)
+- Mobile-friendly touch controls
+- Accurate measurements and positioning
+
+---
+
+## 📊 Where is Data Saved?
+
+### Automatic (LocalStorage)
+- **Auto-saved** to your browser every few seconds
+- Survives page refreshes
+- Browser-specific (doesn't sync across devices)
+- ~5-10MB limit
+- **Great for:** Day-to-day work
+
+### Manual (JSON Export)
+- **Export** button saves `.json` file to your computer
+- Can be imported later
+- Can be shared with team members
+- **Great for:** Client archives, backups, team sharing
+
+### URL Sharing
+- **Share Link** encodes config in URL
+- Shareable via email/text
+- Anyone with link sees the exact configuration
+- **Great for:** Client proposals, remote sales
+
+### Snapshot (Text Report)
+- **Snapshot** button downloads `.txt` file
+- Technical specifications for installers
+- Equipment locations, measurements, electrical
+- **Great for:** Installation teams, contractors
+
+---
+
+## 💰 Pricing (Built-In)
+
+Current pricing includes:
+- Projectors: $909 - $6,735
+- Launch Monitors: $599 - $23,495
+- Screens: $1,885 - $2,500
+- Turf: $11.90/sq ft
+- Hitting Mat: $774.50
+- TV Monitors: $229 each
+- Computer: $2,699
+- Installation: $3,650
+
+**Note:** Update pricing in `GolfSimulatorViewer.jsx` → `PRICING` object
+
+---
+
+## 🚀 Deployment Options
+
+### Option 1: Vercel (Free, Easy)
+```bash
+npm install -g vercel
+vercel
+```
+Get a live URL like: `https://your-golf-sim.vercel.app`
+
+### Option 2: Your Own Website
+```bash
+npm run build
+```
+Upload `dist` folder to your web hosting.
+
+**See [SETUP_GUIDE.md](./SETUP_GUIDE.md) for detailed deployment instructions.**
+
+---
+
+## 📱 Mobile Support
+
+- ✅ Touch controls (swipe to rotate, pinch to zoom)
+- ✅ Responsive panels
+- ✅ Works on phones and tablets
+- ✅ Share links work on any device
+- ✅ Perfect for on-site client meetings
+
+---
+
+## 🎓 Training Your Team
+
+### 5-Minute Training
+
+1. **Open the app:** `http://localhost:3000` (or your deployed URL)
+2. **Configure a room:**
+   - Room tab: Enter dimensions
+   - Screen tab: Choose projector
+   - Equipment tab: Select launch monitor
+3. **Share with client:**
+   - Click "Share Link"
+   - Paste in email/text
+4. **Save your work:**
+   - Click "Export" to save as file
+   - Click "Import" to load later
+
+### Tips for Sales Team
+
+- Start with room dimensions (get this from client first)
+- Use presets if available (see RECOMMENDED_IMPROVEMENTS.md)
+- Always send share link, not just pricing
+- Export final config for your records
+- Use snapshot for installation quotes
+
+---
+
+## 🔧 Customization
+
+### Add Your Company Logo
+
+Replace logo in:
+```
+public/logo.png
+```
+
+### Update Site Title
+
+Edit `index.html`:
+```html
+<title>Your Company - Golf Simulator Tool</title>
+```
+
+### Change Pricing
+
+Edit `src/components/GolfSimulatorViewer.jsx`:
+```javascript
+const PRICING = {
+  projectors: {
+    'BenQ LK936ST': 4849,  // ← Update here
+  },
+  // ... etc
+};
+```
+
+### Add Equipment
+
+Add new models to equipment arrays in `GolfSimulatorViewer.jsx`.
+
+**See [RECOMMENDED_IMPROVEMENTS.md](./RECOMMENDED_IMPROVEMENTS.md) for more ideas.**
+
+---
+
+## 📋 Files Structure
 
 ```
 indoorgolflaunch/
 ├── src/
 │   ├── components/
-│   │   └── GolfSimulatorViewer.jsx  # Main 3D rendering component
-│   ├── App.jsx                       # Root application component
-│   ├── main.jsx                      # Application entry point
-│   └── index.css                     # Global styles
+│   │   └── GolfSimulatorViewer.jsx  # Main app (1500+ lines)
+│   ├── utils/
+│   │   └── configPersistence.js     # Save/load/share logic
+│   ├── App.jsx
+│   ├── main.jsx
+│   └── index.css
+├── public/
+│   └── logo.png                      # Company logo
 ├── index.html                        # HTML template
-├── package.json                      # Dependencies and scripts
-├── vite.config.js                    # Vite configuration
-├── tailwind.config.js                # Tailwind CSS configuration
+├── package.json                      # Dependencies
+├── vite.config.js                    # Build config
+├── SETUP_GUIDE.md                    # Setup instructions
+├── RECOMMENDED_IMPROVEMENTS.md       # Future enhancements
 └── README.md                         # This file
 ```
 
-## 🔧 Configuration Options
+---
 
-### Room Tab
-- Room dimensions (width, depth, height)
-- Wall and ceiling colors
-- Mat distance from screen
-- Turf depth and type
-- Flush/raised turf setting
-- Rough/fringe borders
-- LED strip lighting
-- Curtains
+## 🐛 Troubleshooting
 
-### Screen Tab
-- Screen width and aspect ratio
-- Built-in screen or cage enclosure
-- Acoustic panels
-- Projector model (with automatic throw distance calculation)
+**App won't start?**
+- Make sure Node.js is installed: `node --version`
+- Run `npm install` first
+- Check for errors in terminal
 
-### Equipment Tab
-- Launch monitors (ceiling or floor mounted)
-- TV monitors
-- Computer and desk
-- Ball dispenser
-- Putting cups
-- Golfer avatar
+**Share link not working?**
+- Make sure URL is copied completely
+- Test link in incognito/private browsing
+- Check browser console (F12) for errors
 
-### Furniture Tab
-- Barstools, couches, tables, chairs
-- Position and rotation controls
+**Configuration not saving?**
+- Browser localStorage might be full
+- Try clearing browser cache
+- Use Export/Import as backup
 
-## ⚠️ Important Notes
+**See [SETUP_GUIDE.md](./SETUP_GUIDE.md) for more troubleshooting.**
 
-1. **Data Persistence**: Your configurations are NOT saved automatically. Use the Snapshot button to export your settings.
+---
 
-2. **Browser Compatibility**: This app works best in modern browsers (Chrome, Firefox, Safari, Edge)
+## 🎯 Next Steps
 
-3. **Performance**: The 3D rendering is resource-intensive. For best performance, close other tabs and applications.
+### Immediate (Today)
+1. ✅ Run the app locally (`npm run dev`)
+2. ✅ Create a test configuration
+3. ✅ Test "Share Link" feature
+4. ✅ Export and import a config
 
-## 🐛 Known Limitations
+### This Week
+1. ✅ Train your sales team
+2. ✅ Update pricing to match your rates
+3. ✅ Add your company logo
+4. ✅ Deploy to a public URL
 
-- No automatic save feature (configurations lost on page refresh)
-- No undo/redo functionality
-- No preset templates
-- No configuration import/export (except manual snapshots)
-- Limited to one configuration at a time
+### Future Enhancements
+See [RECOMMENDED_IMPROVEMENTS.md](./RECOMMENDED_IMPROVEMENTS.md) for 30+ feature ideas including:
+- Configuration presets
+- Undo/redo
+- Screenshot capture
+- Client database integration
+- Email templates
+- PDF quote generation
 
-## 📝 License
+---
 
-This project is for personal use.
+## 📞 Support
 
-## 🤝 Contributing
+### Quick Commands
+```bash
+npm install      # Install dependencies (first time)
+npm run dev      # Start development server
+npm run build    # Build for production
+npm run preview  # Preview production build
+```
 
-This is a personal project. For questions or suggestions, please contact the repository owner.
+### Common Issues
+- **Port 3000 busy?** → Close other apps or change port
+- **Dependencies errors?** → Delete `node_modules`, run `npm install`
+- **White screen?** → Check browser console (F12)
+
+---
+
+## 📄 License
+
+This project is for internal use by your sales team.
+
+---
+
+## 🏌️ Built With
+
+- **React 18** - UI framework
+- **Three.js** - 3D rendering engine
+- **Vite** - Build tool and dev server
+- **Tailwind CSS** - Styling framework
+
+---
+
+**Ready to sell more golf simulators?** 🚀
+
+👉 Start with [SETUP_GUIDE.md](./SETUP_GUIDE.md) if this is your first time!

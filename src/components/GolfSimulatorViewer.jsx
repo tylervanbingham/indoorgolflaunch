@@ -1,5 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import {
+  saveToLocalStorage,
+  loadFromLocalStorage,
+  getConfigFromURL,
+  generateShareURL,
+  exportConfigToJSON,
+  importConfigFromJSON,
+  copyToClipboard
+} from '../utils/configPersistence';
 
 const GolfSimulatorViewer = () => {
   const mountRef = useRef(null);
@@ -60,6 +69,92 @@ const GolfSimulatorViewer = () => {
   const [isPricingDragging, setIsPricingDragging] = useState(false);
   const [pricingDragOffset, setPricingDragOffset] = useState({ x: 0, y: 0 });
   const pricingPanelRef = useRef(null);
+
+  // Sales features: notifications and file input
+  const [notification, setNotification] = useState(null);
+  const fileInputRef = useRef(null);
+  const hasLoadedFromURL = useRef(false);
+
+  // Load configuration on mount (URL takes priority over localStorage)
+  useEffect(() => {
+    if (hasLoadedFromURL.current) return;
+    hasLoadedFromURL.current = true;
+
+    // Try URL first (for shared links)
+    const urlConfig = getConfigFromURL();
+    if (urlConfig) {
+      setConfig(urlConfig);
+      showNotification('Configuration loaded from shared link', 'success');
+      return;
+    }
+
+    // Fall back to localStorage
+    const savedConfig = loadFromLocalStorage();
+    if (savedConfig) {
+      setConfig(savedConfig);
+      showNotification('Previous configuration restored', 'info');
+    }
+  }, []);
+
+  // Auto-save to localStorage whenever config changes (debounced)
+  useEffect(() => {
+    if (!hasLoadedFromURL.current) return; // Don't save on initial load
+
+    const timeoutId = setTimeout(() => {
+      saveToLocalStorage(config);
+    }, 500); // Debounce saves by 500ms
+
+    return () => clearTimeout(timeoutId);
+  }, [config]);
+
+  // Show notification helper
+  const showNotification = (message, type = 'info') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
+
+  // Export configuration as JSON
+  const handleExportJSON = () => {
+    const success = exportConfigToJSON(config, `golf-sim-${Date.now()}.json`);
+    if (success) {
+      showNotification('Configuration exported successfully', 'success');
+    } else {
+      showNotification('Failed to export configuration', 'error');
+    }
+  };
+
+  // Import configuration from JSON file
+  const handleImportJSON = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+      const importedConfig = await importConfigFromJSON(file);
+      setConfig(importedConfig);
+      showNotification('Configuration imported successfully', 'success');
+    } catch (error) {
+      showNotification('Failed to import configuration', 'error');
+    }
+
+    // Reset file input
+    event.target.value = '';
+  };
+
+  // Generate and copy share link
+  const handleShareLink = async () => {
+    const shareURL = generateShareURL(config);
+    if (!shareURL) {
+      showNotification('Failed to generate share link', 'error');
+      return;
+    }
+
+    const success = await copyToClipboard(shareURL);
+    if (success) {
+      showNotification('Share link copied to clipboard!', 'success');
+    } else {
+      showNotification('Failed to copy link. URL: ' + shareURL, 'error');
+    }
+  };
 
   const generateSnapshot = () => {
     const scrZ = config.screenType === 'builtin' ? -config.depth/2 + 1 : -config.depth/2 + 1;
@@ -1318,20 +1413,50 @@ Turf Depth: ${config.turfDepth.toFixed(1)}' (starts at screen)
         className="absolute bg-black/90 rounded-lg text-white max-w-sm w-[calc(100vw-2rem)] sm:w-auto"
         onMouseDown={handlePanelMouseDown}
       >
-        <div className="flex items-center justify-between p-4 border-b border-gray-700 cursor-move drag-handle">
-          <h2 className="font-bold">Golf Simulator Config</h2>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={generateSnapshot}
-              className="px-3 py-1 bg-green-600 hover:bg-green-700 rounded text-sm font-semibold flex items-center gap-1"
-              title="Download configuration snapshot with all measurements"
-            >
-              Snapshot
-            </button>
+        <div className="flex flex-col p-4 border-b border-gray-700 cursor-move drag-handle">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="font-bold">Golf Simulator Config</h2>
             <button onClick={() => setShowControls(!showControls)} className="text-2xl w-8 h-8 flex items-center justify-center hover:bg-gray-700 rounded">
               {showControls ? '-' : '+'}
             </button>
           </div>
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              onClick={handleShareLink}
+              className="px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded text-xs font-semibold"
+              title="Copy shareable link to clipboard"
+            >
+              📋 Share Link
+            </button>
+            <button
+              onClick={handleExportJSON}
+              className="px-3 py-1 bg-purple-600 hover:bg-purple-700 rounded text-xs font-semibold"
+              title="Export configuration as JSON file"
+            >
+              💾 Export
+            </button>
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="px-3 py-1 bg-orange-600 hover:bg-orange-700 rounded text-xs font-semibold"
+              title="Import configuration from JSON file"
+            >
+              📂 Import
+            </button>
+            <button
+              onClick={generateSnapshot}
+              className="px-3 py-1 bg-green-600 hover:bg-green-700 rounded text-xs font-semibold"
+              title="Download configuration snapshot with all measurements"
+            >
+              📸 Snapshot
+            </button>
+          </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json"
+            onChange={handleImportJSON}
+            className="hidden"
+          />
         </div>
         {showControls && (
           <div className="max-h-[70vh] overflow-y-auto p-4 space-y-4">
@@ -1380,6 +1505,17 @@ Turf Depth: ${config.turfDepth.toFixed(1)}' (starts at screen)
         <p>{config.screenType === 'builtin' ? 'Built-In' : 'Cage'}</p>
         <p className="text-gray-400 text-[10px] mt-2">Drag/Swipe to rotate - Scroll/Pinch to zoom</p>
       </div>
+
+      {/* Notification Toast */}
+      {notification && (
+        <div className={`absolute top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg text-white font-semibold animate-fade-in z-50 ${
+          notification.type === 'success' ? 'bg-green-600' :
+          notification.type === 'error' ? 'bg-red-600' :
+          'bg-blue-600'
+        }`}>
+          {notification.message}
+        </div>
+      )}
     </div>
   );
 };
